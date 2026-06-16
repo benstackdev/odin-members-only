@@ -1,12 +1,19 @@
 import express from "express";
 import cors from "cors";
+import { getUserById } from "./db/queries";
+import authRouter from "./routes/authRouter";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 const PORT = 8080;
 
 app.use(cors());
 
-app.get("/api", (req, res) => res.json("Hello from the server!"));
+app.use("/api/auth", authRouter);
+
+app.get("/api", async (req, res) => res.json(await getUserById(1)));
 
 app.listen(PORT, (error) => {
   if (error) throw error;

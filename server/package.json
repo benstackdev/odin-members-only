@@ -19,9 +19,15 @@
   },
   "type": "module",
   "dependencies": {
+    "@types/cors": "^2.8.19",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "eslint": "^10.5.0",
     "express": "^5.2.1",
-    "node": "^26.3.0"
+    "jsonwebtoken": "^9.0.3",
+    "node": "^26.3.0",
+    "prettier": "^3.8.4"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
