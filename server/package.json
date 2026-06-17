@@ -20,6 +20,7 @@
   "type": "module",
   "dependencies": {
     "@types/cors": "^2.8.19",
+    "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
@@ -30,6 +31,7 @@
     "prettier": "^3.8.4"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.9.3",

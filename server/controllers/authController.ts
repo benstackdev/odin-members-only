@@ -1,11 +1,43 @@
-import type { Request, Response } from "express"
-import { getUserByUsername } from "../db/queries.ts";
+import type { Request, Response } from "express";
+import { getUserByUsername, postNewUser } from "../db/queries.ts";
 import { generateToken } from "../utils/generateToken";
 import { UserType } from "../types/UserType.type";
+import { verifyPassword } from "../utils/verifyPassword.ts";
+import bcrypt from "bcrypt";
+
+const SALT_ROUNDS = 10;
+
+export const signupPost = async (req: Request, res: Response) => {
+  try {
+    // not worrying about data validation in this middleware function
+
+    // check that username is free
+    const userExists = await getUserByUsername(req.body.username);
+
+    if (userExists) {
+      return res.status(401).json({ error: `User ${req.body.username} already exists` });
+    }
+
+    // encrypt password with bcrypt
+    bcrypt.hash(req.body.password, SALT_ROUNDS, async (error, hash) => {
+      if (error) {
+        throw error;
+      }
+
+      await postNewUser({
+        username: req.body.username,
+        password: hash
+      } as UserType);
+    });
+
+    res.redirect("/api");
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const loginPost = async (req: Request, res: Response) => {
   try {
-    console.log(req);
     // Check username and password exist
     if (!req.body.username) {
       return res.status(401).json({ error: "Username unknown" });
@@ -19,7 +51,7 @@ export const loginPost = async (req: Request, res: Response) => {
     const userCredentials: UserType = {
       username: req.body.username,
       password: req.body.password
-    }
+    };
 
     const queriedUserCredentials = await getUserByUsername(userCredentials.username);
 
@@ -28,9 +60,11 @@ export const loginPost = async (req: Request, res: Response) => {
       return res.status(401).json({ error: `User ${userCredentials.username} could not be found` });
     }
 
-    // Check password (implement with bcrypt later)
-    if (userCredentials.password !== queriedUserCredentials.password) {
-      return res.status(401).json({ error: `Incorrect password for ${userCredentials.username}` });
+    // Check password (do not have to encrypt plaintext first)
+    let passMatch = await verifyPassword(userCredentials.password, queriedUserCredentials.password);
+
+    if (!passMatch) {
+      return res.status(401).json({ error: `Password for ${userCredentials.username} is incorrect` });
     }
 
     // If all tests pass, generate token for the user
@@ -40,4 +74,4 @@ export const loginPost = async (req: Request, res: Response) => {
   } catch (error) {
     throw error;
   }
-}
+};
