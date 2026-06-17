@@ -11,8 +11,10 @@ const PORT = 8080;
 
 app.use(cors());
 
-app.use("/api/auth", authRouter);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+app.use("/api/auth", authRouter);
 app.get("/api", async (req, res) => res.json(await getUserById(1)));
 
 app.listen(PORT, (error) => {
