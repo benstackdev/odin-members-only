@@ -12,13 +12,18 @@ export const CLIENT_URL = "http://localhost:5173";
 const app = express();
 const PORT = 8080;
 
-app.use(cors());
+const corsOptions = {
+  origin: CLIENT_URL,
+  credentials: true
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", authRouter);
-app.get("/api", async (req, res) => res.json(await getUserById(1)));
+app.get("/api", async (req, res) => res.json("Hello API"));
 
 app.listen(PORT, (error) => {
   if (error) throw error;

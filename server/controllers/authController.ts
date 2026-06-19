@@ -72,7 +72,14 @@ export const loginPost = async (req: Request, res: Response) => {
     // If all tests pass, generate token for the user
     const token = generateToken(userCredentials);
 
-    res.json(token);
+    if (token) {
+      res.set("Access-Control-Allow-Origin", "http://localhost:5173");
+      res.cookie("token", token, {
+        maxAge: 3600000
+      }).send(token);
+    } else {
+      res.status(500).json({ error: "Token undefined" });
+    }
   } catch (error) {
     throw error;
   }
