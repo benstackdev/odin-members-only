@@ -4,6 +4,7 @@ import { generateToken } from "../utils/generateToken";
 import { UserType } from "../types/UserType.type";
 import { verifyPassword } from "../utils/verifyPassword.ts";
 import bcrypt from "bcrypt";
+import { CLIENT_URL } from "../server.ts";
 
 const SALT_ROUNDS = 10;
 
@@ -30,7 +31,8 @@ export const signupPost = async (req: Request, res: Response) => {
       } as UserType);
     });
 
-    res.redirect("/api");
+    console.log(req.body.username);
+    res.status(200).json("success");
   } catch (error) {
     throw error;
   }

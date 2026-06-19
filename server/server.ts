@@ -6,6 +6,9 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+// Probably not ideal; redirect just by client port; URL is the same (localhost)
+export const CLIENT_URL = "http://localhost:5173";
+
 const app = express();
 const PORT = 8080;
 

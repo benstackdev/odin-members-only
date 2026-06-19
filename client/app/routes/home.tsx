@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import type { Route } from "./+types/home";
+import type { Route } from "./+types/Home";
+import { Link } from "react-router";
+import { heading1Style, homeLinkStyle } from "~/styles/styleTemplates";
+import Login from "./Login";
 
 export function meta({ }: Route.MetaArgs) {
   return [
@@ -8,7 +11,7 @@ export function meta({ }: Route.MetaArgs) {
   ];
 }
 
-const SERVER_URL = "http://localhost:8080";
+export const SERVER_URL = "http://localhost:8080";
 
 const Home = () => {
   const [serverMsg, setServerMsg] = useState("");
@@ -35,10 +38,28 @@ const Home = () => {
     serverFetch();
   });
 
+  // JWT on client
+  const [token, setToken] = useState('');
+
+  // if (!token) return <Login setToken={setToken} />;
+
   return (
     <>
-      <h1>Hello from the client!</h1>
-      <h1>{serverMsg}</h1>
+      <header>
+        <h1 className={heading1Style}>
+          Odin Members Only
+        </h1>
+      </header>
+      <main>
+        <ul className={`flex justify-evenly md:justify-center md:gap-16`}>
+          <li className={homeLinkStyle}>
+            <Link to="/signup">Sign Up</Link>
+          </li>
+          <li className={homeLinkStyle}>
+            <Link to="/login">Login</Link>
+          </li>
+        </ul>
+      </main>
     </>
   );
 };
