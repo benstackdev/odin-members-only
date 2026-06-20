@@ -30,7 +30,7 @@ const Login = () => {
   const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     await loginUser({ username, password } as UserType);
-    navigate("/");
+    navigate("/message-board");
   };
 
   return (
