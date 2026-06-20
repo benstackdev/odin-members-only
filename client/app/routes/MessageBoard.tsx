@@ -1,18 +1,53 @@
 import Cookies from 'js-cookie';
 import { SERVER_URL } from './Home';
+import { useEffect, useState } from 'react';
+import { Navigate, useNavigate } from 'react-router';
 
 const verifyToken = async (token: string) => {
-  const data = await fetch(`${SERVER_URL}/api/auth/verify`, {
-
+  return fetch(`${SERVER_URL}/api/auth/verify`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
   });
 };
 
 const MessageBoard = () => {
+  const [loading, setLoading] = useState(true);
+  const [authorized, setAuthorized] = useState<boolean>();
 
-  // call verifyToken to verify on backend
+  const token = Cookies.get("token");
+
+  useEffect(() => {
+    const verify = async () => {
+      if (token) {
+        const res = await verifyToken(token);
+        setAuthorized((res.status === 200));
+        setLoading(false);
+      } else {
+        setAuthorized(false);
+        setLoading(false);
+      }
+    };
+
+    verify();
+  }, []);
+
+  if (!loading) {
+    if (authorized) {
+      return (
+        <h1>Message board</h1>
+      );
+    }
+    return (
+      // Should also have some error report back to user like "Login failed" or something
+      <Navigate to="/login" />
+    );
+  }
 
   return (
-    <div>Message board</div>
+    <div className="">Loading...</div>
   );
 };
 
