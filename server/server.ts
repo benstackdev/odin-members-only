@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import { getUserById } from "./db/queries";
 import authRouter from "./routes/authRouter";
 import dotenv from "dotenv";
 

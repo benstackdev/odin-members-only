@@ -4,7 +4,7 @@ import { generateToken } from "../utils/generateToken";
 import { UserType } from "../types/UserType.type";
 import { verifyPassword } from "../utils/verifyPassword.ts";
 import bcrypt from "bcrypt";
-import { CLIENT_URL } from "../server.ts";
+import jwt from "jsonwebtoken";
 
 const SALT_ROUNDS = 10;
 
@@ -80,6 +80,29 @@ export const loginPost = async (req: Request, res: Response) => {
     } else {
       res.status(500).json({ error: "Token undefined" });
     }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const verifyTokenPost = async (req: Request, res: Response) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    // as auth header is of the form 'Bearer <token>'
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ message: "Missing token" });
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET as jwt.Secret, (err, decoded) => {
+      if (err) {
+        return res.status(403).json({ message: "Invalid or expired token" });
+      }
+      console.log(decoded);
+    });
+
+    return res.status(200).json({ message: "Token verified successfully" });
+
   } catch (error) {
     throw error;
   }
