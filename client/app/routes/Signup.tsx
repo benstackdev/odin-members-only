@@ -3,6 +3,7 @@ import { SERVER_URL } from "./Home";
 import { Form, useNavigate } from "react-router";
 import { useState } from "react";
 import type { UserType } from "~/types/UserType.type";
+import BackHomeButton from "~/components/BackHomeButton";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -50,6 +51,7 @@ const Signup = () => {
         </div>
         <button className={submitButtonStyle} type="submit">Sign Up</button>
       </Form>
+      <BackHomeButton />
     </div>
   );
 };

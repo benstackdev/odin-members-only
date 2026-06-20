@@ -3,6 +3,7 @@ import { SERVER_URL } from "./Home";
 import { createCookie, Form, useNavigate } from "react-router";
 import { useState } from "react";
 import type { UserType } from "~/types/UserType.type";
+import BackHomeButton from "~/components/BackHomeButton";
 
 const loginUser = async (userData: UserType) => {
   const res = await fetch(`${SERVER_URL}/api/auth/login`, {
@@ -65,6 +66,7 @@ const Login = () => {
         </div>
         <button className={submitButtonStyle} type="submit">Login</button>
       </Form>
+      <BackHomeButton />
     </div>
   );
 };

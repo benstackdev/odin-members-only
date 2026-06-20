@@ -32,7 +32,7 @@ export const signupPost = async (req: Request, res: Response) => {
     });
 
     console.log(req.body.username);
-    res.status(200).json("success");
+    res.status(200).json({ success: true });
   } catch (error) {
     throw error;
   }
