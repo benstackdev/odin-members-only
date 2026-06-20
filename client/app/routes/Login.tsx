@@ -1,35 +1,47 @@
-import { formRowStyle, heading1Style, inputStyle, submitButtonStyle } from "~/styles/styleTemplates";
+import { errorStyle, formRowStyle, heading1Style, inputStyle, submitButtonStyle } from "~/styles/styleTemplates";
 import { SERVER_URL } from "./Home";
 import { createCookie, Form, useNavigate } from "react-router";
 import { useState } from "react";
 import type { UserType } from "~/types/UserType.type";
 
 const loginUser = async (userData: UserType) => {
-  try {
-    const tokenData = await fetch(`${SERVER_URL}/api/auth/login`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(userData)
-    });
+  const res = await fetch(`${SERVER_URL}/api/auth/login`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(userData)
+  });
 
-    return JSON.stringify(tokenData);
-  } catch (error) {
-    throw error;
+  if (!res.ok) {
+    const error = await res.json();
+    console.error(error);
+    return error;
   }
+
+  const data = await res.json();
+  return data;
 };
 
 const Login = () => {
   const navigate = useNavigate();
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState<string | undefined>();
 
   const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await loginUser({ username, password } as UserType);
+    const loginStatus = await loginUser({ username, password } as UserType);
+
+    if (loginStatus.error) {
+      // handle the error and don't navigate
+      setLoginError(loginStatus.error);
+      return;
+    }
+
     navigate("/message-board");
   };
 
@@ -38,6 +50,9 @@ const Login = () => {
       <header>
         <h1 className={heading1Style}>Login</h1>
       </header>
+      <div className={errorStyle}>
+        {loginError ? `Login error: ${loginError}` : null}
+      </div>
       <Form className={`flex flex-col items-center`}
         onSubmit={handleSubmit}>
         <div className={formRowStyle}>

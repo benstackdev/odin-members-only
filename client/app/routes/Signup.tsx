@@ -1,4 +1,4 @@
-import { formRowStyle, heading1Style, inputStyle, submitButtonStyle } from "~/styles/styleTemplates";
+import { errorStyle, formRowStyle, heading1Style, inputStyle, submitButtonStyle } from "~/styles/styleTemplates";
 import { SERVER_URL } from "./Home";
 import { Form, useNavigate } from "react-router";
 import { useState } from "react";
@@ -9,10 +9,11 @@ const Signup = () => {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [signupError, setSignupError] = useState<string | undefined>();
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await fetch(`${SERVER_URL}/api/auth/signup`, {
+    const res = await fetch(`${SERVER_URL}/api/auth/signup`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json'
@@ -20,7 +21,13 @@ const Signup = () => {
       body: JSON.stringify({ username, password } as UserType)
     });
 
-    navigate("/");
+    if (!res.ok) {
+      const data = await res.json();
+      setSignupError(data.error);
+      return;
+    }
+
+    navigate("/login");
   };
 
   return (
@@ -28,6 +35,9 @@ const Signup = () => {
       <header>
         <h1 className={heading1Style}>Sign Up</h1>
       </header>
+      <div className={errorStyle}>
+        {signupError ? `Signup error: ${signupError}` : null}
+      </div>
       <Form className={`flex flex-col items-center`}
         onSubmit={handleSubmit}>
         <div className={formRowStyle}>

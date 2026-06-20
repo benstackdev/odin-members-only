@@ -55,6 +55,9 @@ const Home = () => {
           <li className={homeLinkStyle}>
             <Link to="/login">Login</Link>
           </li>
+          <li className={homeLinkStyle}>
+            <Link to="/message-board">Message Board</Link>
+          </li>
         </ul>
       </main>
     </>
