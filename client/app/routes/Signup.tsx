@@ -28,7 +28,7 @@ const Signup = () => {
       return;
     }
 
-    navigate("/login");
+    navigate("/signup/success");
   };
 
   return (
@@ -43,11 +43,11 @@ const Signup = () => {
         onSubmit={handleSubmit}>
         <div className={formRowStyle}>
           <label htmlFor="username">Username:</label>
-          <input type="text" name="username" id="username" className={inputStyle} onChange={(e) => setUsername(e.target.value)} />
+          <input type="text" name="username" id="username" className={inputStyle} onChange={(e) => setUsername(e.target.value)} autoComplete="off" />
         </div>
         <div className={formRowStyle}>
           <label htmlFor="password">Password:</label>
-          <input type="password" name="password" id="password" className={inputStyle} onChange={(e) => setPassword(e.target.value)} />
+          <input type="password" name="password" id="password" className={inputStyle} onChange={(e) => setPassword(e.target.value)} autoComplete="off" />
         </div>
         <button className={submitButtonStyle} type="submit">Sign Up</button>
       </Form>

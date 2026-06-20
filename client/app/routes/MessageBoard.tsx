@@ -2,6 +2,7 @@ import Cookies from 'js-cookie';
 import { SERVER_URL } from './Home';
 import { useEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router';
+import BackHomeButton from '~/components/BackHomeButton';
 
 const verifyToken = async (token: string) => {
   return fetch(`${SERVER_URL}/api/auth/verify`, {
@@ -37,7 +38,10 @@ const MessageBoard = () => {
   if (!loading) {
     if (authorized) {
       return (
-        <h1>Message board</h1>
+        <div className="">
+          <h1>Message board</h1>
+          <BackHomeButton />
+        </div>
       );
     }
     return (
