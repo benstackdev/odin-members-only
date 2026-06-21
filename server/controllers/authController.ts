@@ -4,7 +4,7 @@ import { generateToken } from "../utils/generateToken";
 import { UserType } from "../types/UserType.type";
 import { verifyPassword } from "../utils/verifyPassword.ts";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 const SALT_ROUNDS = 10;
 
@@ -94,14 +94,16 @@ export const verifyTokenPost = async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Missing token" });
     }
 
+    let payload: string | JwtPayload | undefined;
+
     jwt.verify(token, process.env.JWT_SECRET as jwt.Secret, (err, decoded) => {
       if (err) {
         return res.status(403).json({ message: "Invalid or expired token" });
       }
-      console.log(decoded);
+      payload = decoded;
     });
 
-    return res.status(200).json({ message: "Token verified successfully" });
+    return res.status(200).json({ message: "Token verified successfully", payload });
 
   } catch (error) {
     throw error;

@@ -3,8 +3,8 @@ import { backHomeButtonStyle } from "~/styles/styleTemplates";
 
 const BackHomeButton = () => {
   return (
-    <div className={backHomeButtonStyle}>
-      <NavLink to="/">Back Home</NavLink>
+    <div className="flex justify-center">
+      <NavLink className={backHomeButtonStyle} to="/">Back Home</NavLink>
     </div>
   );
 };
