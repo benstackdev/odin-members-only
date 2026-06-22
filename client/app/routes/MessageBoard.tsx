@@ -45,9 +45,7 @@ const MessageBoard = () => {
   if (!loading) {
     if (authorized) {
       return (
-        <UserContext value={authUsername}>
-          <MessageBoardLayout />
-        </UserContext>
+        <MessageBoardLayout authUsername={authUsername} />
       );
     }
     return (

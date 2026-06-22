@@ -1,10 +1,7 @@
 import { heading1Style } from "~/styles/styleTemplates";
 import BackHomeButton from "./BackHomeButton";
-import { useContext } from "react";
-import { UserContext } from "~/routes/MessageBoard";
 
-const MessageBoardLayout = () => {
-  const authUsername = useContext(UserContext);
+const MessageBoardLayout = ({ authUsername }: { authUsername: string | null; }) => {
 
   return (
     <>
