@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import authRouter from "./routes/authRouter";
 import dotenv from "dotenv";
+import messagesRouter from "./routes/messagesRouter";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", authRouter);
+app.use("/api/messages", messagesRouter);
 app.get("/api", async (req, res) => res.json("Hello API"));
 
 app.listen(PORT, (error) => {

@@ -17,3 +17,8 @@ export const postNewUser = async (newUser: UserType) => {
     `insert into users (username, password) values ($1, $2)`,
     [newUser.username, newUser.password]);
 };
+
+export const getAllMessages = async () => {
+  const { rows } = await db.query(`select * from messages order by posted desc`);
+  return rows;
+};

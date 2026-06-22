@@ -1,5 +1,4 @@
 import { Router } from "express";
-import cors from "cors";
 import { loginPost, signupPost, verifyTokenPost } from "../controllers/authController";
 
 const authRouter = Router();
