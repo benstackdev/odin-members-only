@@ -50,7 +50,35 @@ const addMessage = async (username: string, message: string) => {
   return data;
 };
 
-const MessageBoardLayout = ({ authUsername }: { authUsername: string | null; }) => {
+const deleteMessage = async (messageObject: MessageType) => {
+  const token = Cookies.get("token");
+
+  const res = await fetch(`${SERVER_URL}/api/messages/delete-message`, {
+    method: 'post',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      username: messageObject.authorid,
+      posted: messageObject.posted
+    })
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    console.error(error);
+    return error;
+  }
+
+  const data = await res.json();
+  console.log(data);
+  return data;
+};
+
+const MessageBoardLayout = ({ authUsername, isAdmin }: { authUsername: string | null, isAdmin: boolean | null; }) => {
   const [messageList, setMessageList] = useState<MessageType[]>([]);
   const [userMessage, setUserMessage] = useState<string>('');
   const [loading, setLoading] = useState(true);
@@ -77,6 +105,7 @@ const MessageBoardLayout = ({ authUsername }: { authUsername: string | null; }) 
     <div className={`flex flex-col justify-center items-center`}>
       <h1 className={heading1Style}>Message Board</h1>
       <h2 className={heading2Style}>Welcome {authUsername}</h2>
+      {isAdmin ? <p>You are an admin</p> : <p>You are a user</p>}
       <Form
         className={`flex justify-around md:justify-center md:gap-4`}
         onSubmit={handleSubmit}>
@@ -94,7 +123,6 @@ const MessageBoardLayout = ({ authUsername }: { authUsername: string | null; }) 
                 <li className={messageItemStyle} key={message.posted}>
                   <p>{message.authorname}: {message.message}</p>
                   <Form className="flex gap-4">
-                    {/* TODO: Only admins should have this button enabled */}
                     <button className={submitButtonStyle} type="submit">Delete</button>
                   </Form>
                 </li>

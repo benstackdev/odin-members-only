@@ -14,12 +14,34 @@ const requestWithToken = async (token: string, relativePath: string) => {
   });
 };
 
+const getAdminStatus = async (username: string) => {
+  const res = await fetch(`${SERVER_URL}/api/auth/is-admin?username=${username}`, {
+    method: 'get',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    console.error(error);
+    return error;
+  }
+
+  const data = await res.json();
+  console.log(data.isAdmin);
+  return data.isAdmin;
+};
+
 export const UserContext = createContext<string | null>(null);
 
 const MessageBoard = () => {
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState<boolean>();
   const [authUsername, setAuthUsername] = useState<string | null>(null);
+  const [authIsAdmin, setAuthIsAdmin] = useState<boolean | null>(null);
 
   const token = Cookies.get("token");
 
@@ -31,6 +53,7 @@ const MessageBoard = () => {
         if (authorized) {
           const resData = await res.json();
           setAuthUsername(resData.payload.username);
+          setAuthIsAdmin(await getAdminStatus(resData.payload.username));
         }
         setLoading(false);
       } else {
@@ -45,7 +68,7 @@ const MessageBoard = () => {
   if (!loading) {
     if (authorized) {
       return (
-        <MessageBoardLayout authUsername={authUsername} />
+        <MessageBoardLayout authUsername={authUsername} isAdmin={authIsAdmin} />
       );
     }
     return (
