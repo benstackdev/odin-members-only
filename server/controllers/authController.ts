@@ -111,3 +111,14 @@ export const verifyTokenPost = async (req: Request, res: Response, next: NextFun
     throw error;
   }
 };
+
+export const isAdminGet = async (req: Request, res: Response) => {
+  try {
+    const user = await getUserByUsername(req.body.username);
+    if (!user) return res.status(404).json({ error: `Could not find user: ${req.body.username}` });
+    console.log(user);
+    return res.status(200).json({ isAdmin: user.isadmin });
+  } catch (error) {
+    throw error;
+  }
+};
