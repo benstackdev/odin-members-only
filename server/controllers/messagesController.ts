@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { getAllMessages } from "../db/queries";
+import { addNewMessage, getAllMessages } from "../db/queries";
 
 export const allMessagesGet = async (req: Request, res: Response) => {
   try {
@@ -9,6 +9,18 @@ export const allMessagesGet = async (req: Request, res: Response) => {
     } else {
       res.status(500).json({ error: "Internal server error: messages could not be found" });
     }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const newMessagePost = async (req: Request, res: Response) => {
+  try {
+    if (!req.body.username) res.status(404).json({ error: "User not found" });
+    if (!req.body.message) res.status(404).json({ error: "Message content not found" });
+
+    await addNewMessage(req.body.username, req.body.message);
+    res.status(200).json({ success: "ok" });
   } catch (error) {
     throw error;
   }

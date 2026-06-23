@@ -1,4 +1,4 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { getUserByUsername, postNewUser } from "../db/queries.ts";
 import { generateToken } from "../utils/generateToken";
 import { UserType } from "../types/UserType.type";
@@ -85,7 +85,7 @@ export const loginPost = async (req: Request, res: Response) => {
   }
 };
 
-export const verifyTokenPost = async (req: Request, res: Response) => {
+export const verifyTokenPost = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers['authorization'];
     // as auth header is of the form 'Bearer <token>'
@@ -103,7 +103,9 @@ export const verifyTokenPost = async (req: Request, res: Response) => {
       payload = decoded;
     });
 
-    return res.status(200).json({ message: "Token verified successfully", payload });
+    res.status(200).json({ message: "Token verified successfully", payload });
+
+    next();
 
   } catch (error) {
     throw error;

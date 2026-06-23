@@ -1,3 +1,4 @@
+import { MessageType } from "../types/MessageType.type";
 import { UserType } from "../types/UserType.type";
 import db from "./pool";
 
@@ -21,4 +22,9 @@ export const postNewUser = async (newUser: UserType) => {
 export const getAllMessages = async () => {
   const { rows } = await db.query(`select * from messages order by posted desc`);
   return rows;
+};
+
+export const addNewMessage = async (username: string, message: string) => {
+  const user = await getUserByUsername(username);
+  await db.query(`insert into messages (authorid, message, authorname) values ($1, $2, $3)`, [user.id, message, username]);
 };
