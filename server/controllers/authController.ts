@@ -28,7 +28,7 @@ export const signupPost = async (req: Request, res: Response) => {
       await postNewUser({
         username: req.body.username,
         password: hash
-      } as UserType);
+      } as UserType, req.body.isAdmin);
     });
 
     console.log(req.body.username);

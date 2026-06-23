@@ -10,6 +10,7 @@ const Signup = () => {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
   const [signupError, setSignupError] = useState<string | undefined>();
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -19,7 +20,7 @@ const Signup = () => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ username, password } as UserType)
+      body: JSON.stringify({ username, password, isAdmin } as UserType & { isAdmin: boolean; })
     });
 
     if (!res.ok) {
@@ -48,6 +49,13 @@ const Signup = () => {
         <div className={formRowStyle}>
           <label htmlFor="password">Password:</label>
           <input type="password" name="password" id="password" className={inputStyle} onChange={(e) => setPassword(e.target.value)} autoComplete="off" />
+        </div>
+        <div className={formRowStyle}>
+          <label
+            className={`flex items-center gap-2`}
+            htmlFor="isAdmin">Admin user:
+            <input type="checkbox" id="isAdmin" name="isAdmin" onChange={(e) => setIsAdmin(e.target.checked)} />
+          </label>
         </div>
         <button className={submitButtonStyle} type="submit">Sign Up</button>
       </Form>

@@ -13,10 +13,16 @@ export const getUserByUsername = async (username: string) => {
 };
 
 // For signup, need to check if user already exists
-export const postNewUser = async (newUser: UserType) => {
-  await db.query(
-    `insert into users (username, password) values ($1, $2)`,
-    [newUser.username, newUser.password]);
+export const postNewUser = async (newUser: UserType, isAdmin?: boolean) => {
+  if (isAdmin) {
+    await db.query(
+      `insert into users (username, password, isadmin) values ($1, $2, $3)`,
+      [newUser.username, newUser.password, true]);
+  } else {
+    await db.query(
+      `insert into users (username, password) values ($1, $2)`,
+      [newUser.username, newUser.password]);
+  }
 };
 
 export const getAllMessages = async () => {
