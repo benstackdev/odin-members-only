@@ -34,3 +34,7 @@ export const addNewMessage = async (username: string, message: string) => {
   const user = await getUserByUsername(username);
   await db.query(`insert into messages (authorid, message, authorname) values ($1, $2, $3)`, [user.id, message, username]);
 };
+
+export const deleteMessage = async (username: string, posted: string) => {
+  await db.query(`delete from messages where authorid=$1 and posted=$2`, [username, posted]);
+};

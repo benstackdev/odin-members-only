@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { addNewMessage, getAllMessages } from "../db/queries";
+import { addNewMessage, deleteMessage, getAllMessages } from "../db/queries";
 
 export const allMessagesGet = async (req: Request, res: Response) => {
   try {
@@ -21,6 +21,19 @@ export const newMessagePost = async (req: Request, res: Response) => {
 
     await addNewMessage(req.body.username, req.body.message);
     res.status(200).json({ success: "ok" });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteMessagePost = async (req: Request, res: Response) => {
+  try {
+    if (!req.body.username) return res.status(404).json({ error: "Username unknown" });
+    if (!req.body.posted) return res.status(404).json({ error: "Posted date unknown" });
+
+    await deleteMessage(req.body.username, req.body.posted);
+    res.status(200).json({ success: "ok" });
+
   } catch (error) {
     throw error;
   }
