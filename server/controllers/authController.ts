@@ -103,9 +103,9 @@ export const verifyTokenPost = async (req: Request, res: Response, next: NextFun
       payload = decoded;
     });
 
-    res.status(200).json({ message: "Token verified successfully", payload });
-
     next();
+
+    res.status(200).json({ message: "Token verified successfully", payload });
 
   } catch (error) {
     throw error;

@@ -6,5 +6,5 @@ export const inputStyle = `border-1 border-gray-500 rounded-lg p-1 text-sm`;
 export const submitButtonStyle = `p-1 rounded-lg bg-gray-500 hover:bg-gray-800`;
 export const errorStyle = `pb-4 flex justify-center text-red-400 text-semibold text-md`;
 export const backHomeButtonStyle = `${homeLinkStyle} flex justify-center mt-2 mx-auto`;
-export const messageListStyle = `m-2 p-4 flex flex-col justify-center border-gray-500 border-1 rounded-lg`;
-export const messageItemStyle = `flex items-center gap-4`;
+export const messageListStyle = `m-2 p-4 flex flex-col justify-center border-gray-500 border-1 rounded-lg md:mx-fit md:w-1/2 gap-1`;
+export const messageItemStyle = `flex items-center justify-between gap-4`;
