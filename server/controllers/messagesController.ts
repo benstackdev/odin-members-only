@@ -29,9 +29,9 @@ export const newMessagePost = async (req: Request, res: Response) => {
 export const deleteMessagePost = async (req: Request, res: Response) => {
   try {
     if (!req.body.username) return res.status(404).json({ error: "Username unknown" });
-    if (!req.body.posted) return res.status(404).json({ error: "Posted date unknown" });
+    if (!req.body.message) return res.status(404).json({ error: "Message unknown" });
 
-    await deleteMessage(req.body.username, req.body.posted);
+    await deleteMessage(req.body.username, req.body.message);
     res.status(200).json({ success: "ok" });
 
   } catch (error) {

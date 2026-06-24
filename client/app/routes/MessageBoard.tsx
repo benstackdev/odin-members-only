@@ -31,7 +31,6 @@ const getAdminStatus = async (username: string) => {
   }
 
   const data = await res.json();
-  console.log(data.isAdmin);
   return data.isAdmin;
 };
 

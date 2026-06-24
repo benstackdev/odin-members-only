@@ -46,7 +46,6 @@ const addMessage = async (username: string, message: string) => {
   }
 
   const data = await res.json();
-  console.log(data);
   return data;
 };
 
@@ -63,7 +62,7 @@ const deleteMessage = async (messageObject: MessageType) => {
     },
     body: JSON.stringify({
       username: messageObject.authorid,
-      posted: messageObject.posted
+      message: messageObject.message
     })
   });
 
@@ -101,6 +100,14 @@ const MessageBoardLayout = ({ authUsername, isAdmin }: { authUsername: string | 
     }
   };
 
+  const handleDeleteMessageSubmit = async (event: React.SubmitEvent<HTMLFormElement>, message: MessageType) => {
+    event.preventDefault();
+    if (isAdmin) {
+      await deleteMessage(message);
+      setLoading(true);
+    }
+  };
+
   return (
     <div className={`flex flex-col justify-center items-center`}>
       <h1 className={heading1Style}>Message Board</h1>
@@ -122,8 +129,14 @@ const MessageBoardLayout = ({ authUsername, isAdmin }: { authUsername: string | 
               return (
                 <li className={messageItemStyle} key={message.posted}>
                   <p>{message.authorname}: {message.message}</p>
-                  <Form className="flex gap-4">
-                    <button className={submitButtonStyle} type="submit">Delete</button>
+                  <Form className="flex gap-4"
+                    onSubmit={async (e: React.SubmitEvent<HTMLFormElement>) => await handleDeleteMessageSubmit(e, message)}>
+                    <button
+                      className={submitButtonStyle}
+                      type="submit"
+                      disabled={!isAdmin}>
+                      Delete
+                    </button>
                   </Form>
                 </li>
               );
